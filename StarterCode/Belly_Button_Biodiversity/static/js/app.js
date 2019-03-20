@@ -4,15 +4,16 @@ function buildMetadata(sample) {
   
 
   // Use `d3.json` to fetch the metadata for a sample
-  var url = '/metadata/${sample}';
+  var url = `/metadata/${sample}`;
   d3.json(url).then(function(response) {
-    console.log(response)
+    console.log(Object.entries(response))
+    
 
     // Use d3 to select the panel with id of `#sample-metadata`
-    // var metaData = d3.select("#sample-metadata")
+    var metaData = d3.select("#sample-metadata");
 
     // Use `.html("") to clear any existing metadata
-    // metaData.html("")
+    metaData.html("");
 
 
     // Use `Object.entries` to add each key and value pair to the panel
@@ -20,20 +21,45 @@ function buildMetadata(sample) {
     // tags for each key-value in the metadata.
 
 
+
+
+
     // BONUS: Build the Gauge Chart
     // buildGauge(data.WFREQ);
 });
 }
-// function buildCharts(sample) {
+function buildCharts(sample) {
 
-//   // @TODO: Use `d3.json` to fetch the sample data for the plots
+   // @TODO: Use `d3.json` to fetch the sample data for the plots
+    var url = `/samples/${sample}`
+    d3.json(url).then(function(response) {
+      console.log(Object.entries(response))
 
-//     // @TODO: Build a Bubble Chart using the sample data
+   // @TODO: Build a Bubble Chart using the sample data   
+   trace1 = {
+    type: "scatter",
+    x: response.otu_ids,
+    y: response.sample_values,
+    mode: "markers",
+    marker: {
+      size: response.sample_values,
+      color: response.otu_ids,
+    }
+  };
 
-//     // @TODO: Build a Pie Chart
-//     // HINT: You will need to use slice() to grab the top 10 sample_values,
-//     // otu_ids, and labels (10 each).
-// }
+    var data = [trace1];
+
+    var layout = {
+      title: "Bubble Chart"
+    };
+
+    Plotly.newPlot("bubble", data, layout);
+
+   // @TODO: Build a Pie Chart
+   // HINT: You will need to use slice() to grab the top 10 sample_values,
+   // otu_ids, and labels (10 each).
+});
+}
 
 function init() {
   // Grab a reference to the dropdown select element
@@ -50,7 +76,7 @@ function init() {
 
     // Use the first sample from the list to build the initial plots
     const firstSample = sampleNames[0];
-    // buildCharts(firstSample);
+    buildCharts(firstSample);
     buildMetadata(firstSample);
   });
 }
@@ -58,7 +84,7 @@ function init() {
 function optionChanged(newSample) {
   // Fetch new data each time a new sample is selected
   // buildCharts(newSample);
-  buildMetadata(newSample);
+  // buildMetadata(newSample);
 }
 
 // Initialize the dashboard
