@@ -18,13 +18,10 @@ function buildMetadata(sample) {
     // Use `Object.entries` to add each key and value pair to the panel
     // Hint: Inside the loop, you will need to use d3 to append new
     // tags for each key-value in the metadata.
-    response.foreach((sampledata) => {
-      var row = metaData.append("tr");
-      Object.entries(sampledata).forEach(([key, value]) => {
-        var cell = row.append("td");
-        cell.text(value);
-      });
-    });
+
+    Object.entries(response).forEach(([key, value]) => {
+      metaData.append("h6").text(`${key}: ${value}`);
+     });
 
 
 
