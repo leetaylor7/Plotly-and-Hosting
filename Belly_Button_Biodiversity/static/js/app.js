@@ -6,7 +6,7 @@ function buildMetadata(sample) {
   // Use `d3.json` to fetch the metadata for a sample
   var url = `/metadata/${sample}`
   d3.json(url).then(function(response) {
-    // console.log(Object.entries(response))
+    console.log(Object.entries(response))
 
     // Use d3 to select the panel with id of `#sample-metadata`
     var metaData = d3.select("#sample-metadata");
@@ -18,6 +18,13 @@ function buildMetadata(sample) {
     // Use `Object.entries` to add each key and value pair to the panel
     // Hint: Inside the loop, you will need to use d3 to append new
     // tags for each key-value in the metadata.
+    response.foreach((sampledata) => {
+      var row = metaData.append("tr");
+      Object.entries(sampledata).forEach(([key, value]) => {
+        var cell = row.append("td");
+        cell.text(value);
+      });
+    });
 
 
 
@@ -100,3 +107,5 @@ function optionChanged(newSample) {
 
 // Initialize the dashboard
 init();
+
+buildMetadata(940);
